@@ -100,18 +100,15 @@
         <!-- Common Information Section -->
         <div>
             <label for="sender-name">Sender Name:</label>
-            <input type="text" id="sender-name" placeholder="Your Name" onchange="syncFields('sender-name')">
+            <input type="text" id="sender-name" placeholder="Your Name" onchange="updatePreview()">
 
             <label for="recipient-name">Recipient Name:</label>
-            <input type="text" id="recipient-name" placeholder="Recipient's Name" onchange="syncFields('recipient-name')">
+            <input type="text" id="recipient-name" placeholder="Recipient's Name" onchange="updatePreview()">
         </div>
 
         <!-- Email Form -->
         <div id="email-form" class="form-section active-section">
             <div>
-                <label for="sender-email">Sender Email:</label>
-                <input type="email" id="sender-email" placeholder="your.email@example.com">
-
                 <label for="recipient-email">Recipient Email:</label>
                 <input type="email" id="recipient-email" placeholder="recipient.email@example.com">
 
@@ -130,9 +127,6 @@
         <!-- SMS Form -->
         <div id="sms-form" class="form-section">
             <div>
-                <label for="sender-phone">Sender Phone Number:</label>
-                <input type="tel" id="sender-phone" placeholder="Your Phone Number">
-
                 <label for="recipient-phone">Recipient Phone Number:</label>
                 <input type="tel" id="recipient-phone" placeholder="Recipient's Phone Number">
 
@@ -171,15 +165,6 @@
             document.getElementById(`${method}-form`).classList.add('active-section');
             
             // Update the preview when switching methods
-            updatePreview();
-        }
-
-        // Sync fields between email and SMS forms
-        function syncFields(fieldName) {
-            // Get value from the changed field
-            const value = document.getElementById(fieldName).value;
-            
-            // Update preview after syncing
             updatePreview();
         }
 
