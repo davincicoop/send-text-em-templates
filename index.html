@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Sender</title>
+    <title>Stairs and Buckets Sender</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -90,48 +90,34 @@
 </head>
 <body>
     <div class="container">
-        <h1>Message Sender</h1>
+        <h1>Stairs and Buckets Sender</h1>
         
         <div class="method-selector">
             <div class="method-tab active-tab" id="email-tab" onclick="switchMethod('email')">Email</div>
             <div class="method-tab" id="sms-tab" onclick="switchMethod('sms')">Text Message</div>
         </div>
 
+        <!-- Common Information Section -->
+        <div>
+            <label for="sender-name">Sender Name:</label>
+            <input type="text" id="sender-name" placeholder="Your Name" onchange="syncFields('sender-name')">
+
+            <label for="recipient-name">Recipient Name:</label>
+            <input type="text" id="recipient-name" placeholder="Recipient's Name" onchange="syncFields('recipient-name')">
+        </div>
+
         <!-- Email Form -->
         <div id="email-form" class="form-section active-section">
             <div>
-                <label for="sender-name">Sender Name:</label>
-                <input type="text" id="sender-name" placeholder="Your Name">
-
                 <label for="sender-email">Sender Email:</label>
                 <input type="email" id="sender-email" placeholder="your.email@example.com">
-
-                <label for="recipient-name">Recipient Name:</label>
-                <input type="text" id="recipient-name" placeholder="Recipient's Name">
 
                 <label for="recipient-email">Recipient Email:</label>
                 <input type="email" id="recipient-email" placeholder="recipient.email@example.com">
 
-                <label for="email-template">Choose a Template:</label>
-                <select id="email-template" onchange="updatePreview('email')">
-                    <option value="meeting-request">Meeting Request</option>
-                    <option value="thank-you">Thank You Note</option>
-                    <option value="invitation">Event Invitation</option>
-                    <option value="follow-up">Follow-up Message</option>
-                    <option value="custom">Custom Message</option>
-                </select>
-
-                <div id="custom-email-section" style="display: none;">
-                    <label for="custom-email-subject">Subject:</label>
-                    <input type="text" id="custom-email-subject" placeholder="Email Subject">
-                    
-                    <label for="custom-email-body">Message:</label>
-                    <textarea id="custom-email-body" rows="5" placeholder="Type your message here..."></textarea>
-                </div>
-
-                <label>Preview:</label>
+                <label>Template Preview:</label>
                 <div class="template-preview">
-                    <div><strong>Subject: </strong><span id="email-subject-preview"></span></div>
+                    <div><strong>Subject: </strong><span id="email-subject-preview">Stairs and Buckets video (5min)</span></div>
                     <div id="email-body-preview" style="margin-top: 10px;"></div>
                 </div>
 
@@ -144,33 +130,13 @@
         <!-- SMS Form -->
         <div id="sms-form" class="form-section">
             <div>
-                <label for="sender-name-sms">Sender Name:</label>
-                <input type="text" id="sender-name-sms" placeholder="Your Name">
-
                 <label for="sender-phone">Sender Phone Number:</label>
                 <input type="tel" id="sender-phone" placeholder="Your Phone Number">
-
-                <label for="recipient-name-sms">Recipient Name:</label>
-                <input type="text" id="recipient-name-sms" placeholder="Recipient's Name">
 
                 <label for="recipient-phone">Recipient Phone Number:</label>
                 <input type="tel" id="recipient-phone" placeholder="Recipient's Phone Number">
 
-                <label for="sms-template">Choose a Template:</label>
-                <select id="sms-template" onchange="updatePreview('sms')">
-                    <option value="quick-meeting">Quick Meeting</option>
-                    <option value="quick-thanks">Quick Thanks</option>
-                    <option value="reminder">Event Reminder</option>
-                    <option value="check-in">Check-in Message</option>
-                    <option value="custom">Custom Message</option>
-                </select>
-
-                <div id="custom-sms-section" style="display: none;">
-                    <label for="custom-sms-body">Message:</label>
-                    <textarea id="custom-sms-body" rows="3" placeholder="Type your message here..."></textarea>
-                </div>
-
-                <label>Preview:</label>
+                <label>Template Preview:</label>
                 <div class="template-preview" id="sms-preview"></div>
 
                 <div class="buttons">
@@ -181,37 +147,17 @@
     </div>
 
     <script>
-        // Template databases
-        const emailTemplates = {
-            'meeting-request': {
-                subject: "Request for a Meeting",
-                body: "Dear {{recipient}},\n\nI hope this email finds you well. I'm {{sender}} and I would like to schedule a meeting with you to discuss potential collaboration opportunities.\n\nPlease let me know when you might be available for a 30-minute call.\n\nBest regards,\n{{sender}}"
-            },
-            'thank-you': {
-                subject: "Thank You",
-                body: "Dear {{recipient}},\n\nI wanted to take a moment to thank you for your support and assistance. Your help has been invaluable.\n\nSincerely,\n{{sender}}"
-            },
-            'invitation': {
-                subject: "Invitation: Upcoming Event",
-                body: "Dear {{recipient}},\n\nI'm pleased to invite you to our upcoming event. It would be wonderful if you could join us.\n\nPlease let me know if you can attend.\n\nBest wishes,\n{{sender}}"
-            },
-            'follow-up': {
-                subject: "Following Up on Our Conversation",
-                body: "Hello {{recipient}},\n\nI'm writing to follow up on our recent conversation. I wanted to check in and see if you had any questions or if there's anything I can help with.\n\nLooking forward to hearing from you.\n\nRegards,\n{{sender}}"
-            }
+        // Template definitions
+        const emailTemplate = {
+            subject: "Stairs and Buckets video (5min)",
+            body: "Hi {{recipient}},\n\nJust wanted to make sure you had a chance to view the Stairs and Buckets video here: https://vimeo.com/1024892530\n\nIt's 5 min long but will give you a comprehensive idea of the life insurance options available, and how to work your way through them.\n\nThanks,\n\n{{sender}}"
         };
 
-        const smsTemplates = {
-            'quick-meeting': "Hi {{recipient}}, it's {{sender}}. Are you free for a quick meeting today?",
-            'quick-thanks': "Hi {{recipient}}, it's {{sender}}. Just wanted to say thanks for your help!",
-            'reminder': "Hi {{recipient}}, it's {{sender}}. Just a reminder about our upcoming meeting.",
-            'check-in': "Hello {{recipient}}, it's {{sender}}. Just checking in to see how things are going."
-        };
+        const smsTemplate = "Hi {{recipient}}, just wanted to make sure you had a chance to view the Stairs and Buckets video here: https://vimeo.com/1024892530 It's 5 min long but will give you a comprehensive idea of the life insurance options available, and how to work your way through them. Thanks, {{sender}}";
 
         // Initialize preview on page load
         document.addEventListener('DOMContentLoaded', function() {
-            updatePreview('email');
-            updatePreview('sms');
+            updatePreview();
         });
 
         // Switch between email and SMS forms
@@ -223,87 +169,56 @@
 
             document.getElementById(`${method}-tab`).classList.add('active-tab');
             document.getElementById(`${method}-form`).classList.add('active-section');
+            
+            // Update the preview when switching methods
+            updatePreview();
         }
 
-        // Update the preview based on selected template
-        function updatePreview(type) {
-            if (type === 'email') {
-                const template = document.getElementById('email-template').value;
-                const recipientName = document.getElementById('recipient-name').value || 'Recipient';
-                const senderName = document.getElementById('sender-name').value || 'Sender';
+        // Sync fields between email and SMS forms
+        function syncFields(fieldName) {
+            // Get value from the changed field
+            const value = document.getElementById(fieldName).value;
+            
+            // Update preview after syncing
+            updatePreview();
+        }
 
-                if (template === 'custom') {
-                    document.getElementById('custom-email-section').style.display = 'block';
-                    const subject = document.getElementById('custom-email-subject').value || 'Custom Subject';
-                    const body = document.getElementById('custom-email-body').value || 'Custom message content...';
-                    
-                    document.getElementById('email-subject-preview').textContent = subject;
-                    document.getElementById('email-body-preview').innerHTML = body.replace(/\n/g, '<br>');
-                } else {
-                    document.getElementById('custom-email-section').style.display = 'none';
-                    const emailTemplate = emailTemplates[template];
-                    
-                    if (emailTemplate) {
-                        let subject = emailTemplate.subject;
-                        let body = emailTemplate.body
-                            .replace(/{{recipient}}/g, recipientName)
-                            .replace(/{{sender}}/g, senderName);
-                        
-                        document.getElementById('email-subject-preview').textContent = subject;
-                        document.getElementById('email-body-preview').innerHTML = body.replace(/\n/g, '<br>');
-                    }
-                }
-            } else if (type === 'sms') {
-                const template = document.getElementById('sms-template').value;
-                const recipientName = document.getElementById('recipient-name-sms').value || 'Recipient';
-                const senderName = document.getElementById('sender-name-sms').value || 'Sender';
-
-                if (template === 'custom') {
-                    document.getElementById('custom-sms-section').style.display = 'block';
-                    const body = document.getElementById('custom-sms-body').value || 'Custom message content...';
-                    document.getElementById('sms-preview').innerHTML = body;
-                } else {
-                    document.getElementById('custom-sms-section').style.display = 'none';
-                    const smsTemplate = smsTemplates[template];
-                    
-                    if (smsTemplate) {
-                        let message = smsTemplate
-                            .replace(/{{recipient}}/g, recipientName)
-                            .replace(/{{sender}}/g, senderName);
-                        
-                        document.getElementById('sms-preview').innerHTML = message;
-                    }
-                }
-            }
+        // Update all previews
+        function updatePreview() {
+            const recipientName = document.getElementById('recipient-name').value || 'Recipient';
+            const senderName = document.getElementById('sender-name').value || 'Sender';
+            
+            // Update email preview
+            let emailBody = emailTemplate.body
+                .replace(/{{recipient}}/g, recipientName)
+                .replace(/{{sender}}/g, senderName);
+            
+            document.getElementById('email-body-preview').innerHTML = emailBody.replace(/\n/g, '<br>');
+            
+            // Update SMS preview
+            let smsMessage = smsTemplate
+                .replace(/{{recipient}}/g, recipientName)
+                .replace(/{{sender}}/g, senderName);
+            
+            document.getElementById('sms-preview').innerHTML = smsMessage;
         }
 
         // Send email using mailto link
         function sendEmail() {
             const recipientEmail = document.getElementById('recipient-email').value;
-            const senderName = document.getElementById('sender-name').value;
-            const template = document.getElementById('email-template').value;
             
             if (!recipientEmail) {
                 alert('Please enter recipient email address');
                 return;
             }
 
-            let subject, body;
+            const recipientName = document.getElementById('recipient-name').value || 'Recipient';
+            const senderName = document.getElementById('sender-name').value || 'Sender';
             
-            if (template === 'custom') {
-                subject = document.getElementById('custom-email-subject').value;
-                body = document.getElementById('custom-email-body').value;
-            } else {
-                const emailTemplate = emailTemplates[template];
-                if (emailTemplate) {
-                    const recipientName = document.getElementById('recipient-name').value || 'Recipient';
-                    
-                    subject = emailTemplate.subject;
-                    body = emailTemplate.body
-                        .replace(/{{recipient}}/g, recipientName)
-                        .replace(/{{sender}}/g, senderName);
-                }
-            }
+            const subject = emailTemplate.subject;
+            const body = emailTemplate.body
+                .replace(/{{recipient}}/g, recipientName)
+                .replace(/{{sender}}/g, senderName);
 
             const mailtoLink = `mailto:${encodeURIComponent(recipientEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
             window.open(mailtoLink);
@@ -312,42 +227,27 @@
         // Send SMS using sms link (works on mobile devices)
         function sendSMS() {
             const recipientPhone = document.getElementById('recipient-phone').value;
-            const senderName = document.getElementById('sender-name-sms').value;
-            const template = document.getElementById('sms-template').value;
             
             if (!recipientPhone) {
                 alert('Please enter recipient phone number');
                 return;
             }
 
-            let message;
+            const recipientName = document.getElementById('recipient-name').value || 'Recipient';
+            const senderName = document.getElementById('sender-name').value || 'Sender';
             
-            if (template === 'custom') {
-                message = document.getElementById('custom-sms-body').value;
-            } else {
-                const smsTemplate = smsTemplates[template];
-                if (smsTemplate) {
-                    const recipientName = document.getElementById('recipient-name-sms').value || 'Recipient';
-                    
-                    message = smsTemplate
-                        .replace(/{{recipient}}/g, recipientName)
-                        .replace(/{{sender}}/g, senderName);
-                }
-            }
+            const message = smsTemplate
+                .replace(/{{recipient}}/g, recipientName)
+                .replace(/{{sender}}/g, senderName);
 
             // SMS URI scheme
             const smsLink = `sms:${recipientPhone}?body=${encodeURIComponent(message)}`;
             window.open(smsLink);
         }
 
-        // Live updates when custom fields change
-        document.getElementById('custom-email-subject').addEventListener('input', () => updatePreview('email'));
-        document.getElementById('custom-email-body').addEventListener('input', () => updatePreview('email'));
-        document.getElementById('custom-sms-body').addEventListener('input', () => updatePreview('sms'));
-        document.getElementById('recipient-name').addEventListener('input', () => updatePreview('email'));
-        document.getElementById('sender-name').addEventListener('input', () => updatePreview('email'));
-        document.getElementById('recipient-name-sms').addEventListener('input', () => updatePreview('sms'));
-        document.getElementById('sender-name-sms').addEventListener('input', () => updatePreview('sms'));
+        // Live updates when fields change
+        document.getElementById('recipient-name').addEventListener('input', updatePreview);
+        document.getElementById('sender-name').addEventListener('input', updatePreview);
     </script>
 </body>
 </html>
